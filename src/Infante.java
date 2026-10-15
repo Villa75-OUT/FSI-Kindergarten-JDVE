@@ -4,6 +4,7 @@ public class Infante {
     
     
    static String todos = "SELECT *  FROM infantes ORDER BY nombrei"; 
+   static String curps = "SELECT curp FROM infantes ORDER BY curp";
     
     String curp, nombrei, sexoi, fecha_nan, estado;
 

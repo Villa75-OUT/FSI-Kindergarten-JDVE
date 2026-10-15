@@ -167,17 +167,24 @@ public class FPrincipal extends javax.swing.JFrame {
     
        if (Binfantes.isSelected()) {
             JDinfantes di = new JDinfantes(this, true);
-            di.setVisible(true);
             di.obtenerConexion(cnx);
+            di.setVisible(true);
+           
         } else if (BBitacora.isSelected()) {
             JDasistencias da = new JDasistencias(this, true);
+            da.obtenerConexion(cnx);
             da.setVisible(true);
+            
         } else if (Bresponsables.isSelected()) {
             JDResponsables dr = new JDResponsables(this, true);
+            dr.obtenerConexion(cnx);
             dr.setVisible(true);
+           
         } else if (Beducadores.isSelected()) {
             JDEducadores de = new JDEducadores(this, true);
+            de.obtenerConexion(cnx);
             de.setVisible(true);
+            
         }
             
     }//GEN-LAST:event_BnuevoActionPerformed

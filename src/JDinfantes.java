@@ -1,5 +1,6 @@
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 public class JDinfantes extends javax.swing.JDialog {
     
@@ -140,7 +141,7 @@ public class JDinfantes extends javax.swing.JDialog {
         TFnombre.getText(),
         TFnombre.getText(),
         CBsexo.getSelectedItem().toString(),
-        s.format(Spfecha.getValue().toString()),
+        s.format((Date)Spfecha.getValue()),
          CBestado.getSelectedItem().toString()
         );
         

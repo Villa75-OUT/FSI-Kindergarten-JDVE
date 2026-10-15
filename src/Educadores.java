@@ -4,6 +4,7 @@ public class Educadores {
     
     
      static String todos = "SELECT *  FROM educadores ORDER BY nombree"; 
+      static String curpsss = "SELECT curpr FROM responsables ORDER BY curpr";
     
     String curpe, nombree, sexoe, telefonoe, direccione, estadoe;
 

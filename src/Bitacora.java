@@ -6,7 +6,6 @@ public class Bitacora {
     
     String falta, tiempo, tipo, observaciones, infantes_curp, responsables_curpr, educadores_curpe;
 
-    // Constructor con los 7 campos
     public Bitacora(String falta, String tiempo, String tipo, String observaciones, String infantes_curp, String responsables_curpr, String educadores_curpe) {
         this.falta = falta;
         this.tiempo = tiempo;
@@ -15,6 +14,10 @@ public class Bitacora {
         this.infantes_curp = infantes_curp;
         this.responsables_curpr = responsables_curpr;
         this.educadores_curpe = educadores_curpe;
+    }
+
+    Bitacora(String text, String text0, String text1, String text2, String fechaEntrada) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     // Método INSERTAR
