@@ -16,6 +16,10 @@ public class Responsables {
         this.estador = estador;
     }
 
+    Responsables() {
+        
+    }
+
     public int insertar(Connection con) {
         int resultado = 0;
         String sql = "INSERT INTO responsables (curpr, nombrer, sexor, telefono, parentesco, estador) VALUES (?,?,?,?,?,?)";

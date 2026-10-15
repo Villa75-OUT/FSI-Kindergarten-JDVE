@@ -17,6 +17,10 @@ public class Educadores {
         this.estadoe = estadoe;
     }
 
+    Educadores() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     // Método INSERTAR
     public int insertar(Connection con) {
         int resultado = 0;

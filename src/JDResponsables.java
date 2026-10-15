@@ -1,3 +1,6 @@
+
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
@@ -20,6 +23,16 @@ public class JDResponsables extends javax.swing.JDialog {
 
      public void obtenerConexion (Conexion cnx){
         this.cnx = cnx;
+    }
+     
+     public void obtenerResponsable(Responsables resp) {
+        if (resp == null) return;
+        TFCurp.setText(resp.curpr);
+        TFnombre.setText(resp.nombrer);
+        CBsexo.setSelectedItem(resp.sexor);
+        TFTelefono.setText(resp.telefono);
+        TFPArentesco.setText(resp.parentesco);
+        TFestado.setSelectedItem(resp.estador);
     }
     
     @SuppressWarnings("unchecked")
@@ -44,7 +57,8 @@ public class JDResponsables extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Borrar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jLabel1.setText("Nombre");
 
@@ -53,7 +67,8 @@ public class JDResponsables extends javax.swing.JDialog {
 
         jLabel2.setText("CURP");
 
-        jButton3.setText("jButton1");
+        jButton3.setText("Editar");
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         jLabel3.setText("Sexo");
 
@@ -89,8 +104,6 @@ public class JDResponsables extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TFnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TFCurp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(CBsexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jButton3)
@@ -100,9 +113,11 @@ public class JDResponsables extends javax.swing.JDialog {
                         .addComponent(jButton1)
                         .addGap(23, 23, 23))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TFTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TFPArentesco, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(TFCurp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                            .addComponent(TFnombre, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TFTelefono, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TFPArentesco, javax.swing.GroupLayout.Alignment.LEADING))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -145,24 +160,75 @@ public class JDResponsables extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BTRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTRegistrarActionPerformed
-        
-        Responsables resp = new Responsables(
-        TFnombre.getText(),
-        TFCurp.getText(),
-        CBsexo.getSelectedItem().toString(),
-        TFTelefono.getText(),
-        TFPArentesco.getText(),
-        TFestado.getSelectedItem().toString()
-    );
+        if (cnx == null || cnx.con == null) {
+            JOptionPane.showMessageDialog(this, "No hay conexión a la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    if (resp.insertar(cnx.con) == 1) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Responsable Registrado con éxito");
-        this.dispose(); // Cierra el JDialog
-    } else {
-        javax.swing.JOptionPane.showMessageDialog(this, "Responsable NO Registrado");
-    }
+        Responsables resp = new Responsables(
+            TFCurp.getText(),                      // 1. curpr
+            TFnombre.getText(),                    // 2. nombrer
+            CBsexo.getSelectedItem().toString(),   // 3. sexor
+            TFTelefono.getText(),                  // 4. telefono
+            TFPArentesco.getText(),                // 5. parentesco
+            TFestado.getSelectedItem().toString()   // 6. estador
+        );
+
+        if (resp.insertar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Responsable Registrado con éxito");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Responsable NO Registrado", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         
     }//GEN-LAST:event_BTRegistrarActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if (cnx == null || cnx.con == null) {
+            JOptionPane.showMessageDialog(this, "No hay conexión a la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Responsables resp = new Responsables(
+            TFCurp.getText(),                      // 1. curpr
+            TFnombre.getText(),                    // 2. nombrer
+            CBsexo.getSelectedItem().toString(),   // 3. sexor
+            TFTelefono.getText(),                  // 4. telefono
+            TFPArentesco.getText(),                // 5. parentesco
+            TFestado.getSelectedItem().toString()   // 6. estador
+        );
+
+        if (resp.actualizar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Responsable Actualizado con éxito");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Responsable NO Actualizado", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (cnx == null || cnx.con == null) {
+            JOptionPane.showMessageDialog(this, "No hay conexión a la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Responsables resp = new Responsables(
+            TFCurp.getText(),                      // 1. curpr
+            TFnombre.getText(),                    // 2. nombrer
+            CBsexo.getSelectedItem().toString(),   // 3. sexor
+            TFTelefono.getText(),                  // 4. telefono
+            TFPArentesco.getText(),                // 5. parentesco
+            TFestado.getSelectedItem().toString()   // 6. estador
+        );
+
+        if (resp.borrar(cnx.con) == 1) {
+            JOptionPane.showMessageDialog(this, "Responsable Borrado con éxito");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Responsable NO Borrado", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

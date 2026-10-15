@@ -28,6 +28,24 @@ public class JDasistencias extends javax.swing.JDialog {
         cnx.seleccionar(Responsables.curpss, jComboBox2);
         cnx.seleccionar(Educadores.curpsss, jComboBox3);
     }
+     
+     public void obtenerBitacora(Bitacora bit) {
+        if (bit == null) return;
+        LFecha.setText(bit.falta);
+        TAobserv.setText(bit.observaciones);
+        jComboBox1.setSelectedItem(bit.infantes_curp);
+        jComboBox2.setSelectedItem(bit.responsables_curpr);
+        jComboBox3.setSelectedItem(bit.educadores_curpe);
+        
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            if (bit.tiempo != null && !bit.tiempo.isEmpty()) {
+                Spfecha.setValue(sdf.parse(bit.tiempo));
+            }
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Error al parsear la fecha de tiempo", ex);
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -48,7 +66,7 @@ public class JDasistencias extends javax.swing.JDialog {
         TAobserv = new javax.swing.JTextArea();
         jLabel16 = new javax.swing.JLabel();
         LFecha = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        Bhoy = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
         jComboBox3 = new javax.swing.JComboBox<>();
@@ -57,13 +75,15 @@ public class JDasistencias extends javax.swing.JDialog {
 
         jLabel2.setText("CURP RESPONSABLE");
 
-        Bactualizar.setText("jButton1");
+        Bactualizar.setText("Editar");
+        Bactualizar.addActionListener(this::BactualizarActionPerformed);
 
         jLabel4.setText("Entrada");
 
         Spfecha.setModel(new javax.swing.SpinnerDateModel());
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Borrar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jLabel1.setText("CURP INFANTE ");
 
@@ -86,8 +106,8 @@ public class JDasistencias extends javax.swing.JDialog {
 
         LFecha.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jButton2.setText("HOY");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        Bhoy.setText("HOY");
+        Bhoy.addActionListener(this::BhoyActionPerformed);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -107,7 +127,7 @@ public class JDasistencias extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(LFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2))
+                        .addComponent(Bhoy))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addGap(18, 18, 18)
@@ -160,7 +180,7 @@ public class JDasistencias extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(LFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(Bhoy))
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -198,15 +218,15 @@ public class JDasistencias extends javax.swing.JDialog {
     String fechaEntrada = sdf.format(Spfecha.getValue());
 
     
-        Bitacora bit = new Bitacora(
-                null,
-                LFecha.getText(),
-                jComboBox1.getSelectedItem().toString(),
-                jComboBox2.getSelectedItem().toString(),
-                jComboBox3.getSelectedItem().toString(),
-                TAobserv.getText(),
-                fechaEntrada
-    );
+       Bitacora bit = new Bitacora(
+            LFecha.getText(),                        // 1. falta (Fecha de registro)
+            fechaEntrada,                            // 2. tiempo (Hora/Fecha de entrada)
+            "Asistencia",                            // 3. tipo
+            TAobserv.getText(),                      // 4. observaciones
+            jComboBox1.getSelectedItem().toString(), // 5. infantes_curp
+            jComboBox2.getSelectedItem().toString(), // 6. responsables_curpr
+            jComboBox3.getSelectedItem().toString()  // 7. educadores_curpe
+        );
 
     if (bit.insertar(cnx.con) == 1) {
         javax.swing.JOptionPane.showMessageDialog(this, "Bitácora / Asistencia Registrada");
@@ -217,15 +237,59 @@ public class JDasistencias extends javax.swing.JDialog {
         
     }//GEN-LAST:event_BregistrarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       
-        
+    private void BhoyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BhoyActionPerformed
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
-        
         LFecha.setText(s.format(new Date()));
         
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_BhoyActionPerformed
+
+    private void BactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BactualizarActionPerformed
+        
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String fechaEntrada = sdf.format(Spfecha.getValue());
+
+    
+       Bitacora bit = new Bitacora(
+            LFecha.getText(),                        // 1. falta (Fecha de registro)
+            fechaEntrada,                            // 2. tiempo (Hora/Fecha de entrada)
+            "Asistencia",                            // 3. tipo
+            TAobserv.getText(),                      // 4. observaciones
+            jComboBox1.getSelectedItem().toString(), // 5. infantes_curp
+            jComboBox2.getSelectedItem().toString(), // 6. responsables_curpr
+            jComboBox3.getSelectedItem().toString()  // 7. educadores_curpe
+        );
+
+    if (bit.actualizar(cnx.con) == 1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Bitácora / Asistencia Registrada");
+        this.dispose(); // Cierra el JDialog
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this, "No se pudo registrar la Asistencia");
+    }
+        
+    }//GEN-LAST:event_BactualizarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String fechaEntrada = sdf.format(Spfecha.getValue());
+
+    
+       Bitacora bit = new Bitacora(
+            LFecha.getText(),                        // 1. falta (Fecha de registro)
+            fechaEntrada,                            // 2. tiempo (Hora/Fecha de entrada)
+            "Asistencia",                            // 3. tipo
+            TAobserv.getText(),                      // 4. observaciones
+            jComboBox1.getSelectedItem().toString(), // 5. infantes_curp
+            jComboBox2.getSelectedItem().toString(), // 6. responsables_curpr
+            jComboBox3.getSelectedItem().toString()  // 7. educadores_curpe
+        );
+
+    if (bit.borrar(cnx.con) == 1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Bitácora / Asistencia Registrada");
+        this.dispose(); // Cierra el JDialog
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this, "No se pudo registrar la Asistencia");
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -266,12 +330,12 @@ public class JDasistencias extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Bactualizar;
+    private javax.swing.JButton Bhoy;
     private javax.swing.JButton Bregistrar;
     private javax.swing.JLabel LFecha;
     private javax.swing.JSpinner Spfecha;
     private javax.swing.JTextArea TAobserv;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;

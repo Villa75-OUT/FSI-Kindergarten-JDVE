@@ -16,6 +16,9 @@ public class Infante {
         this.estado = estado;
     }
 
+    Infante() {
+    }
+
     public int insertar(Connection con) {
         int resultado = 0;
         String sql = "INSERT INTO infantes (curp, nombrei, sexoi, fecha_nan, estado) VALUES (?,?,?,?,?)";

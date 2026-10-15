@@ -4,8 +4,13 @@ public class Bitacora {
     
     static String todos = "SELECT *  FROM bitacora ORDER BY folio DESC"; 
     
-    String falta, tiempo, tipo, observaciones, infantes_curp, responsables_curpr, educadores_curpe;
 
+    String falta, tiempo, tipo, observaciones, infantes_curp, responsables_curpr, educadores_curpe;
+    
+    // Constructor vacío
+    public Bitacora() {
+    }
+    
     public Bitacora(String falta, String tiempo, String tipo, String observaciones, String infantes_curp, String responsables_curpr, String educadores_curpe) {
         this.falta = falta;
         this.tiempo = tiempo;

@@ -1,9 +1,10 @@
 
+import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 public class JDinfantes extends javax.swing.JDialog {
-    
     private Conexion cnx;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JDinfantes.class.getName());
 
@@ -14,6 +15,21 @@ public class JDinfantes extends javax.swing.JDialog {
 
     public void obtenerConexion (Conexion cnx){
         this.cnx = cnx;
+    }
+    
+    public void obtenerInfante(Infante kid) {
+        try {
+            SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+            Date fecha = s.parse(kid.fecha_nan);
+            Spfecha.setValue(fecha);
+            TFcurp.setText(kid.curp);
+            TFnombre.setText(kid.nombrei);
+            CBsexo.setSelectedItem(kid.sexoi);
+        } catch (ParseException ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Error al parsear la fecha del infante", ex);
+        }
+        
+        CBestado.setSelectedItem(kid.estado);
     }
     
     /**
@@ -57,12 +73,14 @@ public class JDinfantes extends javax.swing.JDialog {
 
         Spfecha.setModel(new javax.swing.SpinnerDateModel());
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Borrar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         Bregistrar.setText("Registrar");
         Bregistrar.addActionListener(this::BregistrarActionPerformed);
 
-        Bactualizar.setText("jButton1");
+        Bactualizar.setText("Editar");
+        Bactualizar.addActionListener(this::BactualizarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -138,11 +156,11 @@ public class JDinfantes extends javax.swing.JDialog {
     private void BregistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BregistrarActionPerformed
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
         Infante kid = new Infante(
-        TFnombre.getText(),
-        TFnombre.getText(),
-        CBsexo.getSelectedItem().toString(),
-        s.format((Date)Spfecha.getValue()),
-         CBestado.getSelectedItem().toString()
+            TFcurp.getText(),                       
+            TFnombre.getText(),                     
+            CBsexo.getSelectedItem().toString(),
+            s.format((Date) Spfecha.getValue()),
+            CBestado.getSelectedItem().toString()
         );
         
         if (kid.insertar(cnx.con)==1) {
@@ -154,6 +172,48 @@ public class JDinfantes extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_BregistrarActionPerformed
+
+    private void BactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BactualizarActionPerformed
+        
+
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+       Infante kid = new Infante(
+            TFcurp.getText(),                       // Corregido: CURP
+            TFnombre.getText(),                     // Corregido: Nombre
+            CBsexo.getSelectedItem().toString(),
+            s.format((Date) Spfecha.getValue()),
+            CBestado.getSelectedItem().toString()
+        );
+        
+        if (kid.actualizar(cnx.con)==1) {
+            JOptionPane.showMessageDialog(this, "Infante Actualizado");
+            this.dispose();
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Infante NO Actualizado :c");
+        }
+        
+        
+    }//GEN-LAST:event_BactualizarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+        Infante kid = new Infante(
+            TFcurp.getText(),                       // Corregido: CURP
+            TFnombre.getText(),                     // Corregido: Nombre
+            CBsexo.getSelectedItem().toString(),
+            s.format((Date) Spfecha.getValue()),
+            CBestado.getSelectedItem().toString()
+        );
+        
+        if (kid.borrar(cnx.con)==1) {
+            JOptionPane.showMessageDialog(this, "Infante Registrado");
+            this.dispose();
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Infante NO Registrado :c");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
