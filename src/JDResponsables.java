@@ -213,16 +213,10 @@ public class JDResponsables extends javax.swing.JDialog {
             return;
         }
 
-        Responsables resp = new Responsables(
-            TFCurp.getText(),                      // 1. curpr
-            TFnombre.getText(),                    // 2. nombrer
-            CBsexo.getSelectedItem().toString(),   // 3. sexor
-            TFTelefono.getText(),                  // 4. telefono
-            TFPArentesco.getText(),                // 5. parentesco
-            TFestado.getSelectedItem().toString()   // 6. estador
-        );
+        Responsables resp = new Responsables();
+        resp.curpr = TFCurp.getText(); 
 
-        if (resp.borrar(cnx.con) == 1) {
+    if (resp.borrar(cnx.con) == 1) { 
             JOptionPane.showMessageDialog(this, "Responsable Borrado con éxito");
             this.dispose();
         } else {
